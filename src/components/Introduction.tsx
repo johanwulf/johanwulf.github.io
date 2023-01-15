@@ -5,7 +5,6 @@ export const Introduction = () => {
     return Math.abs(ageDate.getUTCFullYear() - 1970);
   };
 
-  console.log(getAge());
   return (
     <div
       className={`flex flex-col gap-1 transition-all duration-500 ease-in-out opacity-100 text-white mb-4`}

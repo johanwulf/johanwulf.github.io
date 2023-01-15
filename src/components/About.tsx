@@ -1,6 +1,6 @@
 export const About = () => {
   return (
-    <div className={`flex flex-col gap-2 w-auto`}>
+    <div className={`flex flex-col gap-1 w-auto`}>
       <h1 className="text-xl text-white font-bold">About</h1>
       <div className="indent-4 text-white">
         I am particularly interested in web development, and have experience
