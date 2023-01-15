@@ -12,6 +12,7 @@ function App() {
   const [view, setView] = useState(0);
   const [fade, setFade] = useState(false);
   const [showChat, setShowChat] = useState(false);
+  const [modal, showModal] = useState(false);
 
   const handleItemClick = (nextView: View) => {
     setView(nextView);
@@ -28,6 +29,16 @@ function App() {
     setTimeout(() => {
       setShowChat(false);
     }, 1000);
+  };
+
+  const handleButtonClick = (input: string) => {
+    switch (input) {
+      case "linkedin":
+        break;
+
+      default:
+        break;
+    }
   };
 
   return (
@@ -144,31 +155,33 @@ function App() {
           </div>
 
           <div
-            className={`flex flex-col gap-1 transition-all duration-500 ease-in-out absolute w-96 mt-80 ${
+            className={`flex flex-col gap-2 transition-all duration-500 ease-in-out absolute w-96 mt-80 ${
               view === View.CONTACT && fade === false
                 ? "opacity-100"
                 : "opacity-0"
             }`}
           >
             <h1 className="text-xl text-white font-bold">Find me</h1>
-            <div className="flex gap-4">
-              <div className="bg-white">
-                <img src="./linkedin.svg" className="" />
-              </div>
+            <a
+              className="flex gap-4"
+              href="https://www.linkedin.com/in/johanwulf/"
+              target="_blank"
+            >
+              <img src="./linkedin.svg" className="invert" />
               <p className="text-white">LinkedIn</p>
-            </div>
-            <div className="flex gap-4">
-              <div className="bg-white">
-                <img src="./github.svg" className="" />
-              </div>
+            </a>
+            <a
+              className="flex gap-4"
+              href="https://www.github.com/johanwulf"
+              target="_blank"
+            >
+              <img src="./github.svg" className="invert" />
               <p className="text-white">GitHub</p>
-            </div>
-            <div className="flex gap-4">
-              <div className="bg-white">
-                <img src="./mail.svg" className="" />
-              </div>
-              <p className="text-white">Mail</p>
-            </div>
+            </a>
+            <a className="flex gap-4" href="mailto:johan@wulf.gg">
+              <img src="./mail.svg" className="invert" />
+              <p className="text-white">johan@wulf.gg</p>
+            </a>
           </div>
         </div>
       </div>
