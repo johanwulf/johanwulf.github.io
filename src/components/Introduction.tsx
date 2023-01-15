@@ -9,13 +9,6 @@ export const Introduction = () => {
         currently working at IKEA. I have a passion for technology and am always
         striving to learn new things, both in frontend and backend development.
       </div>
-      <div className="indent-3">
-        I am particularly interested in web development, and have experience
-        with languages such as JavaScript, HTML, CSS, and Python. I also love
-        working with different frameworks like React, Angular and Node.js. When
-        I am not working, I enjoy spending my free time training my beloved
-        puppy.
-      </div>
     </div>
   );
 };
