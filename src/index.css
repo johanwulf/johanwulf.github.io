@@ -6,4 +6,5 @@
   background-color: #18181b;
   display: flex;
   justify-content: center;
+  overflow-x: hidden;
 }

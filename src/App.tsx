@@ -79,7 +79,7 @@ function App() {
         </div>
         <div className="mr-2 ml-2">
           <div
-            className={`flex flex-col gap-1 transition-all duration-500 ease-in-out w-80 opacity-100 text-white mb-4`}
+            className={`flex flex-col gap-1 transition-all duration-500 ease-in-out opacity-100 text-white mb-4`}
           >
             <p className="text-l font-semibold">Hello!</p>
             <div className="indent-3">
