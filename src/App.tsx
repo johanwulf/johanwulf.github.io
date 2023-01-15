@@ -34,7 +34,7 @@ function App() {
   return (
     <>
       <div className="flex flex-col content-center w-full max-w-md">
-        <div className="navbar bg-zinc-900 mt-4">
+        <div className="navbar bg-zinc-900">
           <div className="navbar-middle">
             <button
               className="btn btn-square btn-link btn-ghost"
