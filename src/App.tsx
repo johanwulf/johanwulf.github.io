@@ -51,6 +51,7 @@ function App() {
     <div
       className={`flex flex-col content-center w-full max-w-md`}
       onKeyDown={handleKeyPress}
+      tabIndex={0}
     >
       <Navbar>
         <NavbarItem
