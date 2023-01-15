@@ -64,7 +64,7 @@ function App() {
             <button
               className={`btn btn-ghost btn-link lowercase ${
                 view === View.HOME ? "text-orange-500" : "text-orange-300"
-              } no-underline hover:no-underline hover:text-orange-500 font-bold`}
+              } no-underline hover:underline font-bold`}
               onClick={() => handleItemClick(View.HOME)}
             >
               home
@@ -72,7 +72,7 @@ function App() {
             <button
               className={`btn btn-ghost btn-link lowercase ${
                 view === View.ABOUT ? "text-orange-500" : "text-orange-300"
-              } no-underline hover:no-underline hover:text-orange-500 font-bold`}
+              } no-underline hover:underline font-bold`}
               onClick={() => handleItemClick(View.ABOUT)}
             >
               about
@@ -80,13 +80,12 @@ function App() {
             <button
               className={`btn btn-ghost btn-link lowercase ${
                 view === View.CONTACT ? "text-orange-500" : "text-orange-300"
-              } no-underline hover:no-underline hover:text-orange-500 font-bold`}
+              } no-underline hover:underline font-bold`}
               onClick={() => handleItemClick(View.CONTACT)}
             >
               contact
             </button>
           </div>
-          <div className="navbar-end gap-5 mr-96"></div>
         </div>
         <div className="grid h-screen justify-items-center">
           <div
