@@ -43,7 +43,7 @@ function App() {
 
   return (
     <>
-      <div className="artboard phone-3 flex items-center flex-col">
+      <div>
         <div className="navbar bg-zinc-900 mt-4">
           <div className="navbar-middle">
             <button
@@ -87,7 +87,7 @@ function App() {
             </button>
           </div>
         </div>
-        <div className="grid h-screen justify-items-center">
+        <div>
           <div
             className={`flex flex-col gap-1 transition-all duration-500 ease-in-out absolute w-96 opacity-100 text-white`}
           >
