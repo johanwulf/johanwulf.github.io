@@ -3,7 +3,7 @@ export const Introduction = () => {
     <div
       className={`flex flex-col gap-1 transition-all duration-500 ease-in-out opacity-100 text-white mb-4`}
     >
-      <p className="text-l font-semibold">Hello!</p>
+      <p className="text-xl font-semibold">Hello!</p>
       <div className="indent-3">
         My name is Johan Wulf and I am a 25-year-old Junior Software Engineer
         currently working at IKEA. I have a passion for technology and am always
