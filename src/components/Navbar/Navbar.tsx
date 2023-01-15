@@ -17,7 +17,7 @@ export const Navbar = ({ children }: NavbarProps) => {
 
   return (
     <div className="navbar bg-zinc-900">
-      <div className="navbar-middle">
+      <div className="navbar-start">
         <button
           className="btn btn-square btn-link btn-ghost"
           onClick={() => handleLogoClick()}
@@ -33,8 +33,8 @@ export const Navbar = ({ children }: NavbarProps) => {
             Woof
           </div>
         </div>
-        {children}
       </div>
+      <div className="navbar-end">{children}</div>
     </div>
   );
 };
