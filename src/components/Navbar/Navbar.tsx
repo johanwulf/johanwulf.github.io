@@ -24,7 +24,7 @@ export const Navbar = ({ children }: NavbarProps) => {
         >
           <img src="/wolf.svg" className="logo" alt="Wolf logo" />
         </button>
-        <div className="chat chat-start absolute left-16 top-0">
+        <div className="chat chat-start top-0">
           <div
             className={`chat-bubble w-20 transition-all duration-1000 ease-in-out bg-sky-600 text-white ${
               showChat ? "opacity-100" : "opacity-0"
