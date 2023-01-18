@@ -17,7 +17,6 @@ function App() {
   const handleItemClick = (nextView: View) => {
     if (nextView === view) return;
     setFade(true);
-    ("");
     setTimeout(() => {
       setView(nextView);
       setFade(false);
