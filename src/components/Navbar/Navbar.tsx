@@ -16,8 +16,8 @@ export const Navbar = ({ children }: NavbarProps) => {
   };
 
   return (
-    <div className="navbar bg-zinc-900">
-      <div className="navbar-start">
+    <div className="bg-zinc-900 flex flex-row mt-2 mb-2 justify-between w-full h-12 ">
+      <div>
         <button
           className="btn btn-square btn-link btn-ghost"
           onClick={() => handleLogoClick()}
@@ -34,7 +34,7 @@ export const Navbar = ({ children }: NavbarProps) => {
           </div>
         </div>
       </div>
-      <div className="navbar-end">{children}</div>
+      <div>{children}</div>
     </div>
   );
 };

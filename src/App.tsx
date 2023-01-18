@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
-import { About } from "./components/About";
-import { Contact } from "./components/Contact";
-import { Home } from "./components/Home";
-import { Introduction } from "./components/Introduction";
-import { Navbar } from "./components/Navbar/Navbar";
-import { NavbarItem } from "./components/Navbar/NavbarItem";
 import { View } from "./types/view";
 import "./App.css";
+import { About } from "./Components/About";
+import { Contact } from "./Components/Contact";
+import { Home } from "./Components/Home";
+import { Introduction } from "./Components/Introduction";
+import { Navbar } from "./Components/Navbar/Navbar";
+import { NavbarItem } from "./Components/Navbar/NavbarItem";
 
 function App() {
   const [view, setView] = useState(0);
@@ -50,7 +50,7 @@ function App() {
 
   return (
     <div
-      className={`flex flex-col content-center w-full max-w-md`}
+      className={`flex flex-col w-full pl-2 pr-2 flex-shrink flex-grow`}
       onKeyDown={handleKeyPress}
       tabIndex={0}
     >
@@ -74,7 +74,7 @@ function App() {
           onClick={handleItemClick}
         />
       </Navbar>
-      <div className={`mr-2 ml-2 ${spin && "animate-spin"}`}>
+      <div className={`${spin ? "animate-spin" : ""}`}>
         <Introduction />
         <div
           className={`transition-all duration-500 ease-in-out ${
