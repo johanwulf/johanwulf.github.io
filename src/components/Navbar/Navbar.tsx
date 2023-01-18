@@ -16,7 +16,7 @@ export const Navbar = ({ children }: NavbarProps) => {
   };
 
   return (
-    <div className="bg-zinc-900 flex flex-row mt-2 mb-2 justify-between w-full h-12 ">
+    <div className="bg-zinc-900 flex flex-row mt-2 mb-2 justify-between w-full h-12 word-be">
       <div className="flex flex-row">
         <button
           className="btn btn-square btn-link btn-ghost h-12 w-12"

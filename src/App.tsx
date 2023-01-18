@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { View } from "./types/view";
 import "./App.css";
-import { About } from "./Components/About";
-import { Contact } from "./Components/Contact";
-import { Home } from "./Components/Home";
-import { Introduction } from "./Components/Introduction";
-import { Navbar } from "./Components/Navbar/Navbar";
-import { NavbarItem } from "./Components/Navbar/NavbarItem";
+import { About } from "./components/About";
+import { Contact } from "./components/Contact";
+import { Home } from "./components/Home";
+import { Introduction } from "./components/Introduction";
+import { Navbar } from "./components/Navbar/Navbar";
+import { NavbarItem } from "./components/Navbar/NavbarItem";
 
 function App() {
   const [view, setView] = useState(0);
