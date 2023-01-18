@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import "./App.css";
 import { About } from "./components/About";
 import { Contact } from "./components/Contact";
 import { Home } from "./components/Home";
@@ -7,6 +6,7 @@ import { Introduction } from "./components/Introduction";
 import { Navbar } from "./components/Navbar/Navbar";
 import { NavbarItem } from "./components/Navbar/NavbarItem";
 import { View } from "./types/view";
+import "./App.css";
 
 function App() {
   const [view, setView] = useState(0);
@@ -17,6 +17,7 @@ function App() {
   const handleItemClick = (nextView: View) => {
     if (nextView === view) return;
     setFade(true);
+    ("");
     setTimeout(() => {
       setView(nextView);
       setFade(false);
