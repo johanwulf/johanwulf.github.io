@@ -50,7 +50,7 @@ function App() {
 
   return (
     <div
-      className={`flex flex-col w-full pl-2 pr-2 flex-shrink flex-grow`}
+      className={`flex flex-col w-full pl-2 pr-2 flex-shrink flex-grow max-w-md`}
       onKeyDown={handleKeyPress}
       tabIndex={0}
     >
