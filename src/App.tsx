@@ -7,6 +7,7 @@ import { Home } from "./components/Home";
 import { Introduction } from "./components/Introduction";
 import { Navbar } from "./components/Navbar/Navbar";
 import { NavbarItem } from "./components/Navbar/NavbarItem";
+import { Projects } from "./components/Projects";
 
 function App() {
   const [view, setView] = useState(0);
@@ -81,6 +82,7 @@ function App() {
           }`}
         >
           {view === View.HOME && <Home />}
+          {view === View.HOME && <Projects />}
           {view === View.ABOUT && <About />}
           {view === View.CONTACT && <Contact />}
         </div>
