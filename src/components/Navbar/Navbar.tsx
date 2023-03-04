@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 
 type NavbarProps = {
-  children: React.ReactNode;
-}
+  children: React.Element;
+};
 
 export const Navbar = ({ children }: NavbarProps) => {
   const [showChat, setShowChat] = useState(false);
