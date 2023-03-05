@@ -1,11 +1,11 @@
 import { View } from "../../types/view";
 
-interface NavbarProps {
+type NavbarProps = {
   title: string;
   view: View;
   currentView: View;
   onClick: (view: View) => void;
-}
+};
 
 export const NavbarItem = ({
   title,
