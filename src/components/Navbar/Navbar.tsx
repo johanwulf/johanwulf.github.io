@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-interface NavbarProps {
+type NavbarProps = {
   children: React.ReactNode;
 }
 
