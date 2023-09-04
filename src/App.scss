@@ -33,6 +33,7 @@
     height: 0.75rem;
     width: 0.75rem;
     border-radius: 50%;
+    cursor: pointer;
   }
 }
 .show-window {
@@ -81,4 +82,30 @@
 
 .title-bar::after {
   content: "";
+}
+
+.output {
+  color: #a9b1d6;
+}
+
+@keyframes wonkyEffect {
+  0% {
+    transform: scale(1) rotate(0deg);
+  }
+  25% {
+    transform: scale(1.2) rotate(5deg);
+  }
+  50% {
+    transform: scale(0.8) rotate(-5deg);
+  }
+  75% {
+    transform: scale(1.1) rotate(-2deg);
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+.glitch {
+  animation: wonkyEffect 0.1s infinite;
 }
