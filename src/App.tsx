@@ -103,6 +103,7 @@ function App() {
                     <div className="arrow">
                         ❯{" "}
                         <input
+                            autoFocus
                             ref={inputRef}
                             value={command}
                             onChange={(e) => setCommand(e.target.value)}
