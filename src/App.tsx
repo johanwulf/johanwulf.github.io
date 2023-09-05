@@ -36,7 +36,7 @@ function App() {
 
             const entry = fileSystem.filter((e) => e.path === path);
             const files = entry.filter((e) => e.type === FileType.EXECUTEABLE || e.type === FileType.FILE);
-            const folders = entry.filter((e) => e.type === FileType.FOLDER);
+            const folders = entry.filter((e) => e.type === FileType.FOLDER && e.name === arg);
 
             setLog((log) => [...log, newLogEntry]);
             switch (cmd) {

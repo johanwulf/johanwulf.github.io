@@ -27,3 +27,24 @@ export const fileSystem = [
     { name: "fun-things", type: FileType.FOLDER, path: "~" },
     { name: "another.txt", type: FileType.FILE, path: "~/fun-things", content: "Another one" },
 ];
+
+type Entry = {
+    name: string;
+    type: FileType;
+    path: string;
+    content?: string;
+};
+
+class FileSystem {
+    private entries: Array<Entry>;
+
+    constructor(defaultFiles: Array<Entry>) {
+        this.entries = defaultFiles;
+    }
+
+    getPathEntries(path: string) {
+        return this.entries.filter((e) => e.path === path);
+    }
+
+    execute(command: string, entry: Entry) {}
+}
