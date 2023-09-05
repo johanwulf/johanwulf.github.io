@@ -28,6 +28,7 @@ export const fileSystem = [
     { name: "another.txt", type: FileType.FILE, path: "~/fun-things", content: "Another one" },
 ];
 
+/*
 type Entry = {
     name: string;
     type: FileType;
@@ -47,4 +48,4 @@ class FileSystem {
     }
 
     execute(command: string, entry: Entry) {}
-}
+}*/
