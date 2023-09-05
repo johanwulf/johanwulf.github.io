@@ -1,14 +1,20 @@
 import { useEffect, useRef, useState } from "react";
+import { fileSystem } from "../constants/commands";
 import "./App.scss";
-const validCommands = ["rm -rf *", "help", "clear", "weather", "./welcome.sh"];
+
+const validCommands = ["ls", "cd", "clear"];
+
 function App() {
+  const [path, setPath] = useState("~");
   const [command, setCommand] = useState("");
-  const [glitch, setGlitch] = useState(false);
-  const [log, setLog] = useState<{ command: string; output: string | null }[]>([
+  const [log, setLog] = useState<
+    { command: string; output: string | null; path: string }[]
+  >([
     {
       command: "./welcome.sh",
       output:
         "Welcome to my website. If you are comfortable with the terminal and tmux, please have a look around! If not, write help and press enter.",
+      path: "~",
     },
   ]);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -26,24 +32,44 @@ function App() {
       document.removeEventListener("click", handleClick);
     };
   }, []);
+
   const handleKeyDown = (e: any) => {
     if (e.key === "Enter") {
-      const newLogEntry = { command, output: "" };
+      const newLogEntry = { command, output: "", path: path };
+      const c = command.split(" ")[0];
+      const a = command.split(" ")[1];
 
       setLog((log) => [...log, newLogEntry]);
-      if (validCommands.includes(command)) {
-        if (command === "help") {
-          newLogEntry.output = "available commands: help, clear";
+      if (validCommands.includes(c)) {
+        if (command === "ls") {
+          newLogEntry.output = fileSystem
+            .filter((e) => e.path === path)
+            .map((e) => e.name)
+            .join(" ");
         } else if (command === "clear") {
           setLog([]);
         } else if (command === "./welcome.sh") {
           newLogEntry.output =
             "Welcome to my website. If you are comfortable with the terminal and tmux, please have a look around! If not, write help and press enter.";
-        } else if (command === "rm -rf *") {
-          setGlitch(true);
+        } else if (c === "cd") {
+          const f = fileSystem
+            .filter((e) => e.path === path && e.type == "folder")
+            .map((e) => e.name);
+
+          if (a === "..") {
+            setPath("~");
+            newLogEntry.output = " ";
+          } else if (a === "" || a === " ") {
+            setPath("~");
+            newLogEntry.output = " ";
+          } else if (f.length === 0) {
+            newLogEntry.output = "No such folder";
+          } else {
+            setPath(f[0]);
+            newLogEntry.output = " ";
+          }
         }
       } else {
-        // Handle invalid command
         newLogEntry.output = `zsh: command not found: ${command.split(" ")[0]}`;
       }
 
@@ -51,7 +77,7 @@ function App() {
     }
   };
   return (
-    <div className={`main-content ${glitch ? "glitch" : " "}`}>
+    <div className="main-content">
       <div className="title-bar">
         <div className="title-bar-buttons">
           <div className="title-bar-buttons-red"></div>
@@ -63,7 +89,7 @@ function App() {
       <div className="terminal">
         {log.map((entry, index) => (
           <div key={index} className="log-entry">
-            <div className="tilde">~</div>
+            <div className="tilde">{entry.path}</div>
             <div className="arrow">
               ❯ <div className="output">{entry.command}</div>
             </div>
@@ -71,7 +97,7 @@ function App() {
           </div>
         ))}
         <div className="prompt">
-          <div className="tilde">~</div>{" "}
+          <div className="tilde">{path}</div>{" "}
           <div className="arrow">
             ❯{" "}
             <input
