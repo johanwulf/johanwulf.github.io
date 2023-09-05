@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
-import { fileSystem } from "../constants/commands";
+import { FileType, fileSystem } from "../constants/commands";
 import "./App.scss";
 
-const validCommands = ["ls", "cd", "clear"];
+const validCommands = ["ls", "cd", "clear", "cat"];
 
 function App() {
   const [path, setPath] = useState("~");
@@ -53,7 +53,7 @@ function App() {
             "Welcome to my website. If you are comfortable with the terminal and tmux, please have a look around! If not, write help and press enter.";
         } else if (c === "cd") {
           const f = fileSystem
-            .filter((e) => e.path === path && e.type == "folder")
+            .filter((e) => e.path === path && e.type == FileType.FOLDER)
             .map((e) => e.name);
 
           if (a === "..") {
@@ -67,6 +67,18 @@ function App() {
           } else {
             setPath(f[0]);
             newLogEntry.output = " ";
+          }
+        } else if (c === "cat") {
+          const files = fileSystem.filter(
+            (e) =>
+              e.path === path &&
+              (e.type === FileType.FILE || e.type === FileType.EXECUTEABLE) &&
+              e.name === a
+          );
+          if (files.length < 1) {
+            newLogEntry.output = `zsh: file not found: ${a}`;
+          } else {
+            newLogEntry.output = files[0].content!;
           }
         }
       } else {
