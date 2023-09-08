@@ -19,7 +19,7 @@ export type LogEntry = {
 
 export const InitialLogEntry: LogEntry = {
     command: "./welcome.sh",
-    output: "Welcome to my website. If you are comfortable with the terminal and tmux, please have a look around! If not, write help and press enter.",
+    output: `Welcome! \n Please do not run any commands that would break my lovely website. \n If you need help, type \"help\" and press enter`,
     path: "~",
 };
 
@@ -31,17 +31,19 @@ export const fileSystem: File[] = [
         content: "hi im johan",
     },
     {
-        name: "readme.txt",
+        name: "contact.txt",
         type: FileType.FILE,
         path: "~",
-        content: "actually please don't read me",
+        content: `Website: wulf.gg
+                  Github: github.com/johanwulf
+                  Mail: johan@wulf.gg`,
     },
     {
         name: "welcome.sh",
         type: FileType.EXECUTEABLE,
         path: "~",
-        content: "echo Welcome",
+        content: `echo Welcome!
+                echo "Please do not run any commands that would break my lovely website."
+                echo "If you need help, type "help" and press enter"`,
     },
-    { name: "fun-things", type: FileType.FOLDER, path: "~" },
-    { name: "another.txt", type: FileType.FILE, path: "~/fun-things", content: "Another one" },
 ];

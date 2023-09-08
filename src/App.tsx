@@ -107,8 +107,18 @@ function App() {
                 case "":
                     newLogEntry.output = "";
                     break;
+                case "help":
+                    newLogEntry.output = `Available commands are:
+                    cat <file> - outputs content of file
+                    cd <folder> - changes directory to folder 
+                    clear - clears terminal window 
+                    ls - lists files and folders in current directory
+                    mkdir <name> - creates a new directory with specified name in current path
+                    touch <name> - creates a new file with specified name in current path
+                    `;
+                    break;
                 default:
-                    newLogEntry.output = `zsh: command not found: ${arg1}`;
+                    newLogEntry.output = `zsh: command not found: ${cmd}`;
                     break;
             }
 
