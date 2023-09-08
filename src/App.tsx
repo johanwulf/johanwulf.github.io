@@ -12,7 +12,14 @@ function App() {
             path: "~",
         },
     ]);
+
     const inputRef = useRef<HTMLInputElement>(null);
+    const terminalRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        if (!terminalRef.current) return;
+        terminalRef.current.scrollTop = terminalRef.current.scrollHeight;
+    }, [log]);
 
     useEffect(() => {
         const handleClick = () => {
@@ -39,6 +46,7 @@ function App() {
             const folders = entry.filter((e) => e.type === FileType.FOLDER && e.name === arg);
 
             setLog((log) => [...log, newLogEntry]);
+
             switch (cmd) {
                 case "ls":
                     newLogEntry.output = entry.map((e) => e.name).join(" ");
@@ -79,7 +87,7 @@ function App() {
         }
     };
     return (
-        <div className="main-content">
+        <div className="terminal-window">
             <div className="title-bar">
                 <div className="title-bar-buttons">
                     <div className="title-bar-buttons-red"></div>
@@ -88,7 +96,7 @@ function App() {
                 </div>
                 johan.wulf - tmux
             </div>
-            <div className="terminal">
+            <div className="terminal" ref={terminalRef}>
                 {log.map((entry, index) => (
                     <div key={index} className="log-entry">
                         <div className="tilde">{entry.path}</div>
@@ -112,8 +120,8 @@ function App() {
                         />
                     </div>
                 </div>
-                <div className="tmux">1:home* 2:projects 3:about</div>
             </div>
+            <div className="tmux">1:home* 2:projects 3:about</div>
         </div>
     );
 }
