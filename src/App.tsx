@@ -1,20 +1,25 @@
 import { useEffect, useRef, useState } from "react";
-import { FileType, fileSystem } from "../constants/commands";
+import { FileType, fileSystem, File, LogEntry, InitialLogEntry } from "../constants/commands";
 import "./App.scss";
 
 function App() {
     const [path, setPath] = useState("~");
     const [command, setCommand] = useState("");
-    const [log, setLog] = useState<{ command: string; output: string | null; path: string }[]>([
-        {
-            command: "./welcome.sh",
-            output: "Welcome to my website. If you are comfortable with the terminal and tmux, please have a look around! If not, write help and press enter.",
-            path: "~",
-        },
-    ]);
+    const [files, setFiles] = useState<File[]>(fileSystem);
+    const [broken, setBroken] = useState(false);
+    const [old, setOld] = useState(false);
 
     const inputRef = useRef<HTMLInputElement>(null);
     const terminalRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        if (JSON.parse(localStorage.getItem("broken") ?? "false")) {
+            setBroken(true);
+            setOld(true);
+        }
+    }, []);
+
+    const [log, setLog] = useState<LogEntry[]>(JSON.parse(localStorage.getItem("broken") ?? "false") ? [] : [InitialLogEntry]);
 
     useEffect(() => {
         if (!terminalRef.current) return;
@@ -39,15 +44,34 @@ function App() {
         if (e.key === "Enter") {
             const newLogEntry = { command, output: "", path: path };
             const cmd = command.split(" ")[0].trim();
-            const arg = command.split(" ")[1];
+            const [arg1, arg2] = command.split(" ").slice(1);
 
-            const entry = fileSystem.filter((e) => e.path === path);
-            const files = entry.filter((e) => e.type === FileType.EXECUTEABLE || e.type === FileType.FILE);
-            const folders = entry.filter((e) => e.type === FileType.FOLDER && e.name === arg);
+            const entry = files.filter((e) => e.path === path);
+            const f = entry.filter((e) => e.type === FileType.EXECUTEABLE || e.type === FileType.FILE);
+            const folders = entry.filter((e) => e.type === FileType.FOLDER && e.name === arg1);
 
             setLog((log) => [...log, newLogEntry]);
 
+            if (broken) {
+                newLogEntry.output = `unknown command: ${cmd}`;
+                setCommand("");
+                return;
+            }
+
             switch (cmd) {
+                case "touch":
+                    setFiles((f) => [...f, { name: arg1, path, type: FileType.FILE, content: "test" }]);
+                    break;
+                case "mkdir":
+                    setFiles((f) => [...f, { name: arg1, path, type: FileType.FOLDER }]);
+                    break;
+                case "rm":
+                    if (arg1 === "-rf" && arg2 === "/*") {
+                        setBroken(true);
+                        localStorage.setItem("broken", "true");
+                        setFiles([]);
+                    }
+                    break;
                 case "ls":
                     newLogEntry.output = entry.map((e) => e.name).join(" ");
                     break;
@@ -55,37 +79,74 @@ function App() {
                     setLog([]);
                     break;
                 case "cd":
-                    if (!arg) {
+                    if (!arg1) {
                         setPath("~");
-                    } else if (arg === "..") {
-                        setPath("~");
+                    } else if (arg1 === "..") {
+                        const i = path.lastIndexOf("/");
+                        if (i !== -1) {
+                            setPath(path.substring(0, i));
+                        } else {
+                            setPath("~");
+                        }
                         newLogEntry.output = " ";
                     } else if (folders.length === 0) {
                         newLogEntry.output = "No such folder";
                     } else {
-                        setPath("~/" + folders[0].name);
+                        setPath(folders[0].path + "/" + folders[0].name);
                         newLogEntry.output = " ";
                     }
                     break;
                 case "cat":
-                    const f = files.filter((e) => e.name === arg);
-                    if (f.length < 1) {
-                        newLogEntry.output = `zsh: file not found: ${arg}`;
+                    const x = f.filter((e) => e.name === arg1);
+                    if (x.length < 1) {
+                        newLogEntry.output = `zsh: file not found: ${arg1}`;
                     } else {
-                        newLogEntry.output = f[0].content!;
+                        newLogEntry.output = x[0].content!;
                     }
                     break;
                 case "":
                     newLogEntry.output = "";
                     break;
                 default:
-                    newLogEntry.output = `zsh: command not found: ${command.split(" ")[0]}`;
+                    newLogEntry.output = `zsh: command not found: ${arg1}`;
                     break;
             }
 
             setCommand("");
         }
     };
+
+    if (old) {
+        return (
+            <div className="broken">
+                <div className="broken-terminal" ref={terminalRef}>
+                    {log.map((entry, index) => (
+                        <div key={index} className="log-entry">
+                            <div className="broken-arrow">
+                                {`grub rescue>`}
+                                <div className="output">{entry.command}</div>
+                            </div>
+                            {entry.output && <div className="output">{entry.output}</div>}
+                        </div>
+                    ))}
+                    <div className="prompt">
+                        <div className="broken-arrow">
+                            <div>{`grub rescue>`}</div>
+                            <input
+                                autoFocus
+                                ref={inputRef}
+                                value={command}
+                                onChange={(e) => setCommand(e.target.value)}
+                                className="text"
+                                onKeyDown={handleKeyDown}
+                            />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
     return (
         <div className="terminal-window">
             <div className="title-bar">

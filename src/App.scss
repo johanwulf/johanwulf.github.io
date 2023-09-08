@@ -1,8 +1,43 @@
+@font-face {
+    font-family: NerdFont;
+    src: url(../assets/JetBrainsMonoNerdFont-Regular.ttf);
+}
+
+@font-face {
+    font-family: DOS;
+    src: url(../assets/7019-fontps.ttf);
+}
+
 .terminal-window {
+    background: #1a1b26;
+    font-family: NerdFont;
+    color: #a9b1d6;
     height: 100%;
     display: flex;
     flex-direction: column;
 }
+
+.broken {
+    background: black;
+    font-family: DOS;
+}
+
+.broken-terminal {
+    color: white;
+}
+
+.broken-arrow {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    input {
+        all: unset;
+        color: #a9b1d6;
+        flex: 1;
+    }
+}
+
 .title-bar {
     position: sticky;
     top: 0;
