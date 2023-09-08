@@ -8,6 +8,7 @@ function App() {
     const [files, setFiles] = useState<File[]>(fileSystem);
     const [broken, setBroken] = useState(false);
     const [old, setOld] = useState(false);
+    const [nano, setNano] = useState<any | null>(null);
 
     const inputRef = useRef<HTMLInputElement>(null);
     const terminalRef = useRef<HTMLDivElement>(null);
@@ -41,6 +42,11 @@ function App() {
     }, []);
 
     const handleKeyDown = (e: any) => {
+        if (e.ctrlKey && e.key === "x") {
+            setFiles(files.filter((e) => e.name !== nano.name));
+            setFiles((old) => [...old, nano]);
+            setNano(null);
+        }
         if (e.key === "Enter") {
             const newLogEntry = { command, output: "", path: path };
             const [cmd, arg1, arg2] = command.trim().split(" ");
@@ -58,6 +64,15 @@ function App() {
             }
 
             switch (cmd) {
+                case "nano":
+                    const file = f.filter((e) => e.name === arg1)[0];
+
+                    if (!file) {
+                        newLogEntry.output = `nano: file not found ${arg1}`;
+                    } else {
+                        setNano(file);
+                    }
+                    break;
                 case "touch":
                     setFiles((f) => [...f, { name: arg1, path, type: FileType.FILE, content: "test" }]);
                     break;
@@ -157,7 +172,7 @@ function App() {
     }
 
     return (
-        <div className="terminal-window">
+        <div className={old ? "broken-terminal-window" : "terminal-window"}>
             <div className="title-bar">
                 <div className="title-bar-buttons">
                     <div className="title-bar-buttons-red"></div>
@@ -166,31 +181,44 @@ function App() {
                 </div>
                 johan.wulf
             </div>
-            <div className="terminal" ref={terminalRef}>
-                {log.map((entry, index) => (
-                    <div key={index} className="log-entry">
-                        <div className="tilde">{entry.path}</div>
-                        <div className="arrow">
-                            ❯ <div className="output">{entry.command}</div>
+            {!nano && (
+                <div className="terminal" ref={terminalRef}>
+                    {log.map((entry, index) => (
+                        <div key={index} className="log-entry">
+                            <div className="tilde">{entry.path}</div>
+                            <div className="arrow">
+                                ❯ <div className="output">{entry.command}</div>
+                            </div>
+                            {entry.output && <div className="output">{entry.output}</div>}
                         </div>
-                        {entry.output && <div className="output">{entry.output}</div>}
-                    </div>
-                ))}
-                <div className="prompt">
-                    <div className="tilde">{path}</div>{" "}
-                    <div className="arrow">
-                        ❯{" "}
-                        <input
-                            autoFocus
-                            ref={inputRef}
-                            value={command}
-                            onChange={(e) => setCommand(e.target.value)}
-                            className="text"
-                            onKeyDown={handleKeyDown}
-                        />
+                    ))}
+                    <div className="prompt">
+                        <div className="tilde">{path}</div>{" "}
+                        <div className="arrow">
+                            ❯{" "}
+                            <input
+                                autoFocus
+                                ref={inputRef}
+                                value={command}
+                                onChange={(e) => setCommand(e.target.value)}
+                                className="text"
+                                onKeyDown={handleKeyDown}
+                            />
+                        </div>
                     </div>
                 </div>
-            </div>
+            )}
+            {nano && (
+                <div className="terminal">
+                    <textarea
+                        className="nano-text"
+                        autoFocus
+                        value={nano?.content ?? ""}
+                        onChange={(e) => setNano((old: any) => ({ ...old, content: e.target.value }))}
+                        onKeyDown={handleKeyDown}
+                    />
+                </div>
+            )}
         </div>
     );
 }
