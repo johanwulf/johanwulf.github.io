@@ -121,14 +121,6 @@
     display: none;
 }
 
-.tmux {
-    background: #1a1b26;
-    position: fixed;
-    bottom: 0;
-    padding: 0rem 0.5rem 0.5rem 0.5rem;
-    width: 100%;
-}
-
 .title-bar::after {
     content: "";
 }

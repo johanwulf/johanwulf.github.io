@@ -43,8 +43,7 @@ function App() {
     const handleKeyDown = (e: any) => {
         if (e.key === "Enter") {
             const newLogEntry = { command, output: "", path: path };
-            const cmd = command.split(" ")[0].trim();
-            const [arg1, arg2] = command.split(" ").slice(1);
+            const [cmd, arg1, arg2] = command.trim().split(" ");
 
             const entry = files.filter((e) => e.path === path);
             const f = entry.filter((e) => e.type === FileType.EXECUTEABLE || e.type === FileType.FILE);
@@ -165,7 +164,7 @@ function App() {
                     <div className="title-bar-buttons-yellow"></div>
                     <div className="title-bar-buttons-green"></div>
                 </div>
-                johan.wulf - tmux
+                johan.wulf
             </div>
             <div className="terminal" ref={terminalRef}>
                 {log.map((entry, index) => (
@@ -192,7 +191,6 @@ function App() {
                     </div>
                 </div>
             </div>
-            <div className="tmux">1:home* 2:projects 3:about</div>
         </div>
     );
 }
