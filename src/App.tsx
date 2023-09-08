@@ -74,7 +74,7 @@ function App() {
                     }
                     break;
                 case "touch":
-                    setFiles((f) => [...f, { name: arg1, path, type: FileType.FILE, content: "test" }]);
+                    setFiles((f) => [...f, { name: arg1, path, type: FileType.FILE, content: "" }]);
                     break;
                 case "mkdir":
                     setFiles((f) => [...f, { name: arg1, path, type: FileType.FOLDER }]);
