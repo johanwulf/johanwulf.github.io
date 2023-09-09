@@ -46,4 +46,20 @@ export const fileSystem: File[] = [
                 echo "Please do not run any commands that would break my lovely website."
                 echo "If you need help, type "help" and press enter"`,
     },
+    {
+        name: ".config",
+        type: FileType.FOLDER,
+        path: "~",
+    },
+    {
+        name: "alacritty.json",
+        type: FileType.FILE,
+        path: "~/.config",
+        content: JSON.stringify({
+            colors: {
+                titlebar: "#222436",
+                background: "#1a1b26",
+            },
+        }),
+    },
 ];
