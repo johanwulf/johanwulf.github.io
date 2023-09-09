@@ -9,7 +9,6 @@
 }
 
 .terminal-window {
-    background: #1a1b26;
     font-family: NerdFont;
     color: #a9b1d6;
     height: 100%;
@@ -72,7 +71,6 @@
     > .title-bar {
         position: sticky;
         top: 0;
-        background: #222436;
         display: flex;
         flex-direction: row;
         justify-content: space-between;

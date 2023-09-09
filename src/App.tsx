@@ -9,7 +9,10 @@ function App() {
     const [broken, setBroken] = useState(false);
     const [old, setOld] = useState(false);
     const [nano, setNano] = useState<any | null>(null);
-
+    const [colors, setColors] = useState<any>({
+        titlebar: "#222436",
+        background: "#1a1b26",
+    });
     const inputRef = useRef<HTMLInputElement>(null);
     const terminalRef = useRef<HTMLDivElement>(null);
 
@@ -19,6 +22,29 @@ function App() {
             setOld(true);
         }
     }, []);
+
+    useEffect(() => {
+        const file = files.find((e) => e.name === "alacritty.json");
+        if (!file || !file.content) {
+            setColors({
+                titlebar: "#222436",
+                background: "#1a1b26",
+            });
+        } else {
+            const c = JSON.parse(file.content ?? "");
+            if (!c.colors.titlebar || !c.colors.background) {
+                setColors({
+                    titlebar: "#222436",
+                    background: "#1a1b26",
+                });
+            } else {
+                setColors({
+                    titlebar: c.colors.titlebar,
+                    background: c.colors.background,
+                });
+            }
+        }
+    }, [files]);
 
     const [log, setLog] = useState<LogEntry[]>(JSON.parse(localStorage.getItem("broken") ?? "false") ? [] : [InitialLogEntry]);
 
@@ -87,7 +113,14 @@ function App() {
                     }
                     break;
                 case "ls":
-                    newLogEntry.output = entry.map((e) => e.name).join(" ");
+                    const files = entry.map((e) => e.name);
+                    if (!arg1) {
+                        newLogEntry.output = files.filter((e) => e.charAt(0) !== ".").join(" ");
+                    } else if (arg1 === "-a") {
+                        newLogEntry.output = files.join(" ");
+                    } else {
+                        newLogEntry.output = `zsh: unknown argument ${arg1}`;
+                    }
                     break;
                 case "clear":
                     setLog([]);
@@ -172,8 +205,8 @@ function App() {
     }
 
     return (
-        <div className={old ? "broken-terminal-window" : "terminal-window"}>
-            <div className="title-bar">
+        <div className={old ? "broken-terminal-window" : "terminal-window"} style={{ background: colors.background }}>
+            <div className="title-bar" style={{ background: colors.titlebar }}>
                 <div className="title-bar-buttons">
                     <div className="title-bar-buttons-red"></div>
                     <div className="title-bar-buttons-yellow"></div>
@@ -214,7 +247,7 @@ function App() {
                         className="nano-text"
                         autoFocus
                         value={nano?.content ?? ""}
-                        onChange={(e) => setNano((old: any) => ({ ...old, content: e.target.value }))}
+                        onChange={(e) => setNano((old: any) => ({ ...old, content: e.target.value.trim() }))}
                         onKeyDown={handleKeyDown}
                     />
                 </div>
