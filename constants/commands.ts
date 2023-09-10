@@ -24,7 +24,14 @@ export type LogEntry = {
 
 export const InitialLogEntry: LogEntry = {
     command: "./welcome.sh",
-    output: `Welcome! \n Please do not run any commands that would break my lovely website. \n If you need help, type \"help\" and press enter`,
+    output: `Welcome to my website!
+    This page is created to replicate my terminal setup
+    Feel free to move around, create files/folders and edit them
+
+    Interested in knowing more about me? Type "cat about.txt" and press enter
+    In the same manner, my contact details can be found by running "cat contact.txt"
+    
+    If you want to see what commands you can run in this terminal, run the command "help"`,
     path: "~",
 };
 
@@ -33,7 +40,9 @@ export const fileSystem: File[] = [
         name: "about.txt",
         type: FileType.FILE,
         path: "~",
-        content: "hi im johan",
+        content: `Hello!
+        I'm a software engineer based in Sweden.
+        I do a bit of everything, frontend, backend, you name it.`,
     },
     {
         name: "contact.txt",
@@ -47,9 +56,7 @@ export const fileSystem: File[] = [
         name: "welcome.sh",
         type: FileType.EXECUTEABLE,
         path: "~",
-        content: `echo Welcome!
-                echo "Please do not run any commands that would break my lovely website."
-                echo "If you need help, type "help" and press enter"`,
+        content: InitialLogEntry.output,
     },
     {
         name: ".config",
@@ -76,4 +83,5 @@ export const HELP_STRING = `Available commands are:
                     ls - lists files and folders in current directory
                     mkdir <name> - creates a new directory with specified name in current path
                     touch <name> - creates a new file with specified name in current path
+                    nano <file> - opens an editor for the specified file
                     `;
