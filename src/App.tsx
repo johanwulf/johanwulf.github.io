@@ -239,11 +239,6 @@ function App() {
     return (
         <div className={old ? "broken-terminal-window" : "terminal-window"} style={{ background: colors.background }}>
             <div className="title-bar" style={{ background: colors.titlebar }}>
-                <div className="title-bar-buttons">
-                    <div className="title-bar-buttons-red"></div>
-                    <div className="title-bar-buttons-yellow"></div>
-                    <div className="title-bar-buttons-green"></div>
-                </div>
                 johan.wulf
             </div>
             {!nano && (

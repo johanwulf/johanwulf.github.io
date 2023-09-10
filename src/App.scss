@@ -31,14 +31,6 @@
         display: none;
     }
 
-    .title-bar::after {
-        content: "";
-    }
-
-    .output {
-        color: #a9b1d6;
-    }
-
     .nano-text {
         all: unset;
         color: #a9b1d6;
@@ -84,34 +76,9 @@
         top: 0;
         display: flex;
         flex-direction: row;
-        justify-content: space-between;
+        justify-content: center;
         align-items: center;
         padding: 0.25rem 0.5rem 0.25rem 0.5rem;
-
-        .title-bar-buttons {
-            display: flex;
-            flex-direction: row;
-            gap: 0.5rem;
-
-            &-red {
-                background: #ff5c54;
-            }
-
-            &-yellow {
-                background: #ffbc2c;
-            }
-
-            &-green {
-                background: #30cc44;
-            }
-        }
-
-        .title-bar-buttons > * {
-            height: 0.75rem;
-            width: 0.75rem;
-            border-radius: 50%;
-            cursor: pointer;
-        }
     }
 }
 
