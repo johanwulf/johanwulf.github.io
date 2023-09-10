@@ -4,6 +4,11 @@ export enum FileType {
     EXECUTEABLE,
 }
 
+export type Command = {
+    command: string;
+    args: string[];
+};
+
 export type File = {
     name: string;
     type: FileType;
@@ -63,3 +68,12 @@ export const fileSystem: File[] = [
         }),
     },
 ];
+
+export const HELP_STRING = `Available commands are:
+                    cat <file> - outputs content of file
+                    cd <folder> - changes directory to folder 
+                    clear - clears terminal window 
+                    ls - lists files and folders in current directory
+                    mkdir <name> - creates a new directory with specified name in current path
+                    touch <name> - creates a new file with specified name in current path
+                    `;

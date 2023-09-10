@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { FileType, fileSystem, File, LogEntry, InitialLogEntry } from "../constants/commands";
+import { FileType, fileSystem, File, LogEntry, InitialLogEntry, HELP_STRING } from "../constants/commands";
 import "./App.scss";
 
 function App() {
@@ -67,6 +67,124 @@ function App() {
         };
     }, []);
 
+    const updateLog = (command: string, output: string) => {
+        const newLogEntry = { command, output, path };
+        setLog((log) => [...log, newLogEntry]);
+        return newLogEntry;
+    };
+
+    const getFilesInPath = () => {
+        return files.filter((file: File) => file.path === path && file.type !== FileType.FOLDER);
+    };
+
+    const getFoldersInPath = () => {
+        return files.filter((file: File) => file.path === path && file.type === FileType.FOLDER);
+    };
+
+    const handleCommand = (command: string) => {
+        const [cmd, arg1, arg2] = command.trim().split(" ");
+        const pathFiles = files.filter((e: File) => e.path === path);
+        const currentFolders = getFoldersInPath();
+        const currentFiles = getFilesInPath();
+
+        if (broken) {
+            if (!cmd) {
+                updateLog("", "");
+            } else {
+                updateLog(command, `unknown command: ${cmd}`);
+            }
+            return;
+        }
+
+        switch (cmd) {
+            case "nano":
+                const fileToEdit = currentFiles.find((e) => e.name === arg1);
+                if (!fileToEdit) {
+                    throw new Error(`nano: file not found: ${arg1}`);
+                } else {
+                    setNano(fileToEdit);
+                }
+                break;
+            case "touch":
+                if (!currentFiles.find((e) => e.name === arg1)) {
+                    setFiles((f) => [...f, { name: arg1, path, type: FileType.FILE, content: "" }]);
+                }
+                updateLog(`${cmd} ${arg1}`, "");
+                break;
+            case "mkdir":
+                if (!currentFolders.find((e) => e.name === arg1)) {
+                    setFiles((f) => [...f, { name: arg1, path, type: FileType.FOLDER }]);
+                    updateLog(`${cmd} ${arg1}`, "");
+                } else {
+                    throw new Error(`mkdir: directory already exist: ${arg1}`);
+                }
+                break;
+            case "rm":
+                if (arg1 === "-rf" && arg2 === "/*") {
+                    setBroken(true);
+                    localStorage.setItem("broken", "true");
+                    updateLog(`${cmd} ${arg1} ${arg2}`, "");
+                    setFiles([]);
+                }
+                break;
+            case "ls":
+                if (!arg1) {
+                    updateLog(
+                        "ls",
+                        pathFiles
+                            .map((file) => file.name)
+                            .filter((str) => str.charAt(0) !== ".")
+                            .join(" ")
+                    );
+                } else if (arg1 === "-a") {
+                    updateLog("ls -a", pathFiles.map((file) => file.name).join(" "));
+                } else {
+                    throw new Error(`ls: unknown argument: ${arg1}`);
+                }
+                break;
+            case "clear":
+                setLog([]);
+                break;
+            case "cd":
+                if (!arg1) {
+                    setPath("~");
+                    updateLog("cd", "");
+                } else if (arg1 === "..") {
+                    const i = path.lastIndexOf("/");
+                    if (i !== -1) {
+                        setPath(path.substring(0, i));
+                    } else {
+                        setPath("~");
+                    }
+                    updateLog("cd ..", "");
+                } else if (!currentFolders.find((folder) => folder.name === arg1)) {
+                    updateLog(`cd ${arg1}`, `cd: no such directory: ${arg1}`);
+                } else {
+                    const folder = currentFolders.find((folder) => folder.name === arg1);
+                    setPath(folder!.path + "/" + folder!.name);
+                    updateLog(`cd ${arg1}`, "");
+                }
+                break;
+            case "cat":
+                if (!arg1) {
+                    throw new Error(`cat: need to specify file`);
+                } else if (!files.find((file) => file.name === arg1)) {
+                    throw new Error(`cat: file not found: ${arg1}`);
+                } else {
+                    updateLog(`cat ${arg1}`, files.find((file) => file.name === arg1)!.content ?? "");
+                }
+                break;
+            case "help":
+                updateLog(cmd, HELP_STRING);
+                break;
+            case "":
+                updateLog("", "");
+                break;
+            default:
+                throw new Error(`zsh: command not found: ${cmd}`);
+        }
+    };
+
     const handleKeyDown = (e: any) => {
         if (nano && e.ctrlKey && e.key === "x") {
             setFiles(files.filter((e) => e.name !== nano.name));
@@ -75,103 +193,15 @@ function App() {
         } else if (nano && e.ctrlKey && e.key === "c") {
             setNano(null);
         }
+
         if (e.key === "Enter") {
-            const newLogEntry = { command, output: "", path: path };
-            const [cmd, arg1, arg2] = command.trim().split(" ");
-
-            const entry = files.filter((e) => e.path === path);
-            const f = entry.filter((e) => e.type === FileType.EXECUTEABLE || e.type === FileType.FILE);
-            const folders = entry.filter((e) => e.type === FileType.FOLDER && e.name === arg1);
-
-            setLog((log) => [...log, newLogEntry]);
-
-            if (broken) {
-                newLogEntry.output = `unknown command: ${cmd}`;
+            try {
+                handleCommand(command);
+            } catch (error: any) {
+                updateLog(command, error.message);
+            } finally {
                 setCommand("");
-                return;
             }
-
-            switch (cmd) {
-                case "nano":
-                    const file = f.filter((e) => e.name === arg1)[0];
-
-                    if (!file) {
-                        newLogEntry.output = `nano: file not found ${arg1}`;
-                    } else {
-                        setNano(file);
-                    }
-                    break;
-                case "touch":
-                    setFiles((f) => [...f, { name: arg1, path, type: FileType.FILE, content: "" }]);
-                    break;
-                case "mkdir":
-                    setFiles((f) => [...f, { name: arg1, path, type: FileType.FOLDER }]);
-                    break;
-                case "rm":
-                    if (arg1 === "-rf" && arg2 === "/*") {
-                        setBroken(true);
-                        localStorage.setItem("broken", "true");
-                        setFiles([]);
-                    }
-                    break;
-                case "ls":
-                    const files = entry.map((e) => e.name);
-                    if (!arg1) {
-                        newLogEntry.output = files.filter((e) => e.charAt(0) !== ".").join(" ");
-                    } else if (arg1 === "-a") {
-                        newLogEntry.output = files.join(" ");
-                    } else {
-                        newLogEntry.output = `zsh: unknown argument ${arg1}`;
-                    }
-                    break;
-                case "clear":
-                    setLog([]);
-                    break;
-                case "cd":
-                    if (!arg1) {
-                        setPath("~");
-                    } else if (arg1 === "..") {
-                        const i = path.lastIndexOf("/");
-                        if (i !== -1) {
-                            setPath(path.substring(0, i));
-                        } else {
-                            setPath("~");
-                        }
-                        newLogEntry.output = " ";
-                    } else if (folders.length === 0) {
-                        newLogEntry.output = "No such folder";
-                    } else {
-                        setPath(folders[0].path + "/" + folders[0].name);
-                        newLogEntry.output = " ";
-                    }
-                    break;
-                case "cat":
-                    const x = f.filter((e) => e.name === arg1);
-                    if (x.length < 1) {
-                        newLogEntry.output = `zsh: file not found: ${arg1}`;
-                    } else {
-                        newLogEntry.output = x[0].content!;
-                    }
-                    break;
-                case "":
-                    newLogEntry.output = "";
-                    break;
-                case "help":
-                    newLogEntry.output = `Available commands are:
-                    cat <file> - outputs content of file
-                    cd <folder> - changes directory to folder 
-                    clear - clears terminal window 
-                    ls - lists files and folders in current directory
-                    mkdir <name> - creates a new directory with specified name in current path
-                    touch <name> - creates a new file with specified name in current path
-                    `;
-                    break;
-                default:
-                    newLogEntry.output = `zsh: command not found: ${cmd}`;
-                    break;
-            }
-
-            setCommand("");
         }
     };
 
