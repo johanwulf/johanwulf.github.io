@@ -58,6 +58,17 @@
             width: 100%;
         }
     }
+
+    .nano-bar {
+        padding-left: 0.5rem;
+        display: flex;
+        gap: 1rem;
+        span {
+            background: #a9b1d6;
+            color: #1a1b26;
+        }
+    }
+
     .terminal {
         padding: 0.5rem;
         display: flex;

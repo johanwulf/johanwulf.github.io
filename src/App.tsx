@@ -68,9 +68,11 @@ function App() {
     }, []);
 
     const handleKeyDown = (e: any) => {
-        if (e.ctrlKey && e.key === "x") {
+        if (nano && e.ctrlKey && e.key === "x") {
             setFiles(files.filter((e) => e.name !== nano.name));
             setFiles((old) => [...old, nano]);
+            setNano(null);
+        } else if (nano && e.ctrlKey && e.key === "c") {
             setNano(null);
         }
         if (e.key === "Enter") {
@@ -242,6 +244,7 @@ function App() {
                 </div>
             )}
             {nano && (
+<<<<<<< Updated upstream
                 <div className="terminal">
                     <textarea
                         className="nano-text"
@@ -251,6 +254,23 @@ function App() {
                         onKeyDown={handleKeyDown}
                     />
                 </div>
+=======
+                <>
+                    <div className="terminal">
+                        <textarea
+                            className="nano-text"
+                            autoFocus
+                            value={nano?.content ?? ""}
+                            onChange={(e) => setNano((old: any) => ({ ...old, content: e.target.value.trim() }))}
+                            onKeyDown={handleKeyDown}
+                        />
+                    </div>
+                    <div className="nano-bar">
+                        <span>^X SAVE</span>
+                        <span>^C DISCARD</span>
+                    </div>
+                </>
+>>>>>>> Stashed changes
             )}
         </div>
     );
