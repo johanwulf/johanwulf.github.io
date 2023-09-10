@@ -244,17 +244,6 @@ function App() {
                 </div>
             )}
             {nano && (
-<<<<<<< Updated upstream
-                <div className="terminal">
-                    <textarea
-                        className="nano-text"
-                        autoFocus
-                        value={nano?.content ?? ""}
-                        onChange={(e) => setNano((old: any) => ({ ...old, content: e.target.value.trim() }))}
-                        onKeyDown={handleKeyDown}
-                    />
-                </div>
-=======
                 <>
                     <div className="terminal">
                         <textarea
@@ -270,7 +259,6 @@ function App() {
                         <span>^C DISCARD</span>
                     </div>
                 </>
->>>>>>> Stashed changes
             )}
         </div>
     );
