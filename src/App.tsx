@@ -100,10 +100,11 @@ function App() {
             case "nano":
                 const fileToEdit = currentFiles.find((e) => e.name === arg1);
                 if (!fileToEdit) {
-                    throw new Error(`nano: file not found: ${arg1}`);
+                    throw new Error(`nano: file not found: ${arg1 ?? ""}`);
                 } else {
                     setNano(fileToEdit);
                 }
+                updateLog(`${cmd} ${arg1}`, "");
                 break;
             case "touch":
                 if (!currentFiles.find((e) => e.name === arg1)) {
