@@ -126,6 +126,11 @@ function App() {
                     localStorage.setItem("broken", "true");
                     updateLog(`${cmd} ${arg1} ${arg2}`, "");
                     setFiles([]);
+                } else if (pathFiles.find((file) => file.name === arg1)) {
+                    updateLog(`${cmd} ${arg1}`, "");
+                    setFiles((f) => [...f.filter((file) => file.name !== arg1)]);
+                } else {
+                    throw new Error(`rm: file or directory not found: ${arg1}`);
                 }
                 break;
             case "ls":
