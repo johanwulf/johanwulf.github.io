@@ -86,9 +86,24 @@
     }
 }
 
-.broken {
-    background: black;
+.broken-terminal-window {
+    color: #ffffff;
     font-family: DOS;
+
+    input {
+        all: unset;
+        width: 90%;
+    }
+
+    .arrow {
+        display: flex;
+    }
+    .title-bar {
+        display: none;
+    }
+}
+
+.broken {
 }
 
 .broken-terminal {

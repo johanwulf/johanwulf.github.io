@@ -205,39 +205,8 @@ function App() {
         }
     };
 
-    if (old) {
-        return (
-            <div className="broken">
-                <div className="broken-terminal" ref={terminalRef}>
-                    {log.map((entry, index) => (
-                        <div key={index} className="log-entry">
-                            <div className="broken-arrow">
-                                {`grub rescue>`}
-                                <div className="output">{entry.command}</div>
-                            </div>
-                            {entry.output && <div className="output">{entry.output}</div>}
-                        </div>
-                    ))}
-                    <div className="prompt">
-                        <div className="broken-arrow">
-                            <div>{`grub rescue>`}</div>
-                            <input
-                                autoFocus
-                                ref={inputRef}
-                                value={command}
-                                onChange={(e) => setCommand(e.target.value)}
-                                className="text"
-                                onKeyDown={handleKeyDown}
-                            />
-                        </div>
-                    </div>
-                </div>
-            </div>
-        );
-    }
-
     return (
-        <div className={old ? "broken-terminal-window" : "terminal-window"} style={{ background: colors.background }}>
+        <div className={old ? "broken-terminal-window" : "terminal-window"} style={{ background: old ? "#000000" : colors.background }}>
             <div className="title-bar" style={{ background: colors.titlebar }}>
                 johan.wulf
             </div>
@@ -245,17 +214,17 @@ function App() {
                 <div className="terminal" ref={terminalRef}>
                     {log.map((entry, index) => (
                         <div key={index} className="log-entry">
-                            <div className="tilde">{entry.path}</div>
+                            {!old && <div className="tilde">{entry.path}</div>}
                             <div className="arrow">
-                                ❯ <div className="output">{entry.command}</div>
+                                {old ? "grub rescue>" : "❯"} <div className="output">{entry.command}</div>
                             </div>
                             {entry.output && <div className="output">{entry.output}</div>}
                         </div>
                     ))}
                     <div className="prompt">
-                        <div className="tilde">{path}</div>{" "}
+                        {!old && <div className="tilde">{path}</div>}
                         <div className="arrow">
-                            ❯{" "}
+                            <span>{old ? "grub rescue>" : "❯"} </span>
                             <input
                                 autoFocus
                                 ref={inputRef}
