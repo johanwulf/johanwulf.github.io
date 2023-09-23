@@ -250,7 +250,7 @@ function App() {
                             className="nano-text"
                             autoFocus
                             value={nano?.content ?? ""}
-                            onChange={(e) => setNano((old: any) => ({ ...old, content: e.target.value.trim() }))}
+                            onChange={(e) => setNano((old: any) => ({ ...old, content: e.target.value }))}
                             onKeyDown={handleKeyDown}
                         />
                     </div>
