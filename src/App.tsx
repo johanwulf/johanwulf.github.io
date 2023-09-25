@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { FileType, fileSystem, File, LogEntry, InitialLogEntry, HELP_STRING } from "../constants/commands";
+import { FileType, fileSystem, File, LogEntry, InitialLogEntry, HELP_STRING } from "./constants/files";
 import "./App.scss";
 
 function App() {

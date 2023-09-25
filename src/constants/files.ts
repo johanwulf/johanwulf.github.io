@@ -4,11 +4,6 @@ export enum FileType {
     EXECUTEABLE,
 }
 
-export type Command = {
-    command: string;
-    args: string[];
-};
-
 export type File = {
     name: string;
     type: FileType;
