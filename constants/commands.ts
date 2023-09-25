@@ -22,16 +22,20 @@ export type LogEntry = {
     path: string;
 };
 
+const trimString = (input: string) => {
+    return input.replace(/^ +/gm, "");
+};
+
 export const InitialLogEntry: LogEntry = {
     command: "./welcome.sh",
-    output: `Welcome to my website!
+    output: trimString(`Welcome to my website!
     This page is created to replicate my terminal setup
     Feel free to move around, create files/folders and edit them
 
     Interested in knowing more about me? Type "cat about.txt" and press enter
     In the same manner, my contact details can be found by running "cat contact.txt"
     
-    If you want to see what commands you can run in this terminal, run the command "help"`,
+    If you want to see what commands you can run in this terminal, run the command "help"`),
     path: "~",
 };
 
@@ -40,17 +44,17 @@ export const fileSystem: File[] = [
         name: "about.txt",
         type: FileType.FILE,
         path: "~",
-        content: `Hello!
+        content: trimString(`Hello!
         I'm a software engineer based in Sweden.
-        I do a bit of everything, frontend, backend, you name it.`,
+        I do a bit of everything, frontend, backend, you name it.`),
     },
     {
         name: "contact.txt",
         type: FileType.FILE,
         path: "~",
-        content: `Website: wulf.gg
+        content: trimString(`Website: wulf.gg
                   Github: github.com/johanwulf
-                  Mail: johan@wulf.gg`,
+                  Mail: johan@wulf.gg`),
     },
     {
         name: "welcome.sh",
