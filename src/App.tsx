@@ -35,7 +35,7 @@ function App() {
             if (!c.colors.titlebar || !c.colors.background) {
                 setColors({
                     titlebar: "#222435",
-                    background: "#1a1b26",
+                    background: "#2a1b26",
                 });
             } else {
                 setColors({
