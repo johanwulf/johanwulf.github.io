@@ -34,7 +34,7 @@ function App() {
             const c = JSON.parse(file.content ?? "");
             if (!c.colors.titlebar || !c.colors.background) {
                 setColors({
-                    titlebar: "#222436",
+                    titlebar: "#222435",
                     background: "#1a1b26",
                 });
             } else {
