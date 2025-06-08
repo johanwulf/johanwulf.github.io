@@ -1,0 +1,51 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'
+
+const projects = [
+  {
+    title: "Personal Website",
+    description: "This website - built with Astro, React, TypeScript, and MDX",
+    tech: ["Astro", "TypeScript", "Tailwind CSS", "MDX"],
+    github: "https://github.com/johanwulf/johanwulf.github.io"
+  },
+  {
+    title: "Dotfiles",
+    description: "My personal development environment configuration",
+    tech: ["Neovim", "Tmux", "Alacritty", "Bash"],
+    github: "https://github.com/johanwulf/.dotfiles"
+  },
+]
+---
+
+<BaseLayout title="Projects - Johan Wulf">
+  <h1 class="text-2xl font-normal mb-8">Projects</h1>
+  <div class="space-y-8">
+    {projects.map((project) => (
+      <article class="pb-8 border-b border-surface-0 last:border-0">
+        <h2 class="text-lg text-text mb-2">
+          <span class="text-green">◆</span> {project.title}
+        </h2>
+        <p class="text-overlay-0 text-sm mb-3">
+          {project.description}
+        </p>
+        <div class="flex flex-wrap gap-2 mb-3">
+          {project.tech.map(tech => (
+            <span class="text-xs px-2 py-1 bg-surface-0 text-overlay-1 rounded">
+              {tech}
+            </span>
+          ))}
+        </div>
+        {project.github && (
+          <a 
+            href={project.github} 
+            class="text-blue hover:underline text-sm"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            → View on GitHub
+          </a>
+        )}
+      </article>
+    ))}
+  </div>
+</BaseLayout>

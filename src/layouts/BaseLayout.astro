@@ -1,0 +1,64 @@
+---
+export interface Props {
+  title: string
+  description?: string
+}
+
+const { title, description = "Johan Wulf - Personal Website" } = Astro.props
+const pathname = Astro.url.pathname
+
+const navItems = [
+  { path: '/', label: '~/' },
+  { path: '/blog', label: '~/blog' },
+  { path: '/projects', label: '~/projects' },
+  { path: '/about', label: '~/about' },
+]
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content={description}>
+  <title>{title}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-base text-text font-mono min-h-screen">
+  <div class="max-w-3xl mx-auto px-8 py-8">
+    <header class="mb-16 pb-8 border-b border-surface-0">
+      <pre class="text-blue text-xs leading-none mb-8 overflow-x-auto font-mono whitespace-pre">   _       _                               _  __ 
+  (_) ___ | |__   __ _ _ ____      ___   _| |/ _|
+  | |/ _ \| '_ \ / _` | '_ \ \ /\ / / | | | | |_ 
+  | | (_) | | | | (_| | | | \ V  V /| |_| | |  _|
+ _/ |\___/|_| |_|\__,_|_| |_|\_/\_/  \__,_|_|_|  
+|__/                                             </pre>
+      <nav class="flex gap-8 text-sm">
+        {navItems.map((item) => {
+          const isActive = pathname === item.path || (item.path !== '/' && pathname.startsWith(item.path))
+          return (
+            <a 
+              href={item.path} 
+              class={isActive ? 'text-text' : 'text-overlay-0 hover:text-text transition-colors'}
+            >
+              {item.label}
+            </a>
+          )
+        })}
+      </nav>
+    </header>
+    <main>
+      <slot />
+    </main>
+    <footer class="mt-24 pt-8 border-t border-surface-0 text-center text-overlay-0 text-xs">
+      <p>© 2024 Johan Wulf · Built with Astro</p>
+    </footer>
+  </div>
+</body>
+</html>
+
+<style is:global>
+  @import "../styles/globals.css";
+</style>

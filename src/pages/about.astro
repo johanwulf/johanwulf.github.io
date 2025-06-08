@@ -1,0 +1,82 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'
+---
+
+<BaseLayout title="About - Johan Wulf">
+  <div class="space-y-8">
+    <!-- Header -->
+    <section>
+      <h1 class="text-3xl font-normal text-text mb-2">Johan Wulf</h1>
+      <div class="text-sm text-overlay-0 space-x-4">
+        <span>johan@wulf.gg</span>
+        <span>·</span>
+        <a href="https://github.com/johanwulf" class="text-blue hover:underline">github.com/johanwulf</a>
+      </div>
+    </section>
+
+    <!-- Experience -->
+    <section>
+      <h2 class="text-xl text-blue mb-4 pb-2 border-b border-surface-0">EXPERIENCE</h2>
+      
+      <div class="space-y-6">
+        <!-- Software Engineer -->
+        <div>
+          <div class="flex justify-between items-baseline mb-1">
+            <h3 class="text-lg font-semibold text-text">Software Engineer</h3>
+            <span class="text-sm text-overlay-0">Dec 2023 – Present</span>
+          </div>
+          <p class="text-overlay-1 mb-2">IKEA – Helsingborg</p>
+        </div>
+
+        <!-- Junior Software Engineer -->
+        <div>
+          <div class="flex justify-between items-baseline mb-1">
+            <h3 class="text-lg font-semibold text-text">Junior Software Engineer</h3>
+            <span class="text-sm text-overlay-0">June 2022 – Dec 2023</span>
+          </div>
+          <p class="text-overlay-1 mb-2">IKEA – Helsingborg</p>
+        </div>
+
+        <!-- Software Developer -->
+        <div>
+          <div class="flex justify-between items-baseline mb-1">
+            <h3 class="text-lg font-semibold text-text">Software Developer</h3>
+            <span class="text-sm text-overlay-0">June 2021 – June 2022</span>
+          </div>
+          <p class="text-overlay-1 mb-2">On-IQ Vision – Lund</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Skills -->
+    <section>
+      <h2 class="text-xl text-blue mb-4 pb-2 border-b border-surface-0">SKILLS</h2>
+      <div class="space-y-2 text-sm">
+        <div>
+          <span class="text-overlay-1">Languages:</span>
+          <span class="text-text ml-2">TypeScript/JavaScript, Java, Go, Python, Lua, Bash, SQL</span>
+        </div>
+        <div>
+          <span class="text-overlay-1">Frameworks and libraries:</span>
+          <span class="text-text ml-2">React.js, Node.js, Express.js, Next.js, shadcn/ui, Prisma</span>
+        </div>
+        <div>
+          <span class="text-overlay-1">Software:</span>
+          <span class="text-text ml-2">Git, Google Cloud Platform</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Education -->
+    <section>
+      <h2 class="text-xl text-blue mb-4 pb-2 border-b border-surface-0">EDUCATION</h2>
+      <div>
+        <div class="flex justify-between items-baseline mb-1">
+          <h3 class="text-lg font-semibold text-text">Bachelor of Science in Engineering, Computer Science and Engineering</h3>
+          <span class="text-sm text-overlay-0">Aug 2019 – June 2022</span>
+        </div>
+        <p class="text-overlay-1">Lunds Tekniska Högskola</p>
+      </div>
+    </section>
+  </div>
+</BaseLayout>

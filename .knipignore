@@ -1,0 +1,20 @@
+# Build output
+dist/
+build/
+
+# Test files
+**/*.test.ts
+**/*.test.tsx
+**/*.spec.ts
+**/*.spec.tsx
+
+# Config files
+*.config.js
+*.config.ts
+vite.config.ts.timestamp-*
+
+# Type definitions
+*.d.ts
+
+# MDX files are handled separately
+*.mdx

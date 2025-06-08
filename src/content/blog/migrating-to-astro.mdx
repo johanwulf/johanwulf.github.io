@@ -1,0 +1,100 @@
+---
+title: Migrating to Astro
+date: 2024-06-08
+tags: [astro, web, migration, mdx]
+description: How I migrated my personal website from Vite + React to Astro
+---
+
+After struggling with complex MDX configurations and build tool conflicts, I decided to migrate my personal website to Astro.
+
+## The Problem
+
+I started with a Vite + React + MDX setup, which seemed like a good idea at first. But as I added more features, the complexity grew:
+
+- PostCSS and Tailwind CSS v4 conflicts
+- Complex MDX configuration with multiple plugins
+- Manual routing for blog posts
+- Heavy JavaScript bundle for a mostly static site
+
+## Enter Astro
+
+Astro is a modern static site generator that's perfect for content-focused websites. Here's what sold me:
+
+### Zero JavaScript by Default
+
+Unlike traditional React apps, Astro ships zero JavaScript by default. Your pages are fully rendered at build time.
+
+### Built-in MDX Support
+
+```js
+// astro.config.mjs
+import mdx from '@astrojs/mdx'
+
+export default defineConfig({
+  integrations: [mdx()]
+})
+```
+
+### Content Collections
+
+Astro's content collections provide type-safe content management:
+
+```typescript
+import { defineCollection, z } from 'astro:content'
+
+const blogCollection = defineCollection({
+  type: 'content',
+  schema: z.object({
+    title: z.string(),
+    date: z.coerce.date(),
+    tags: z.array(z.string()),
+    description: z.string().optional(),
+  }),
+})
+```
+
+## The Migration Process
+
+The migration was surprisingly smooth:
+
+1. **Created Astro project structure**
+   - Pages go in `src/pages/`
+   - Layouts in `src/layouts/`
+   - Blog posts in `src/content/blog/`
+
+2. **Converted React components to Astro**
+   - Most components became `.astro` files
+   - Kept React only for interactive components
+
+## The Results
+
+The page you are looking at!
+
+## Code Example
+
+Here's how simple a blog post page is in Astro:
+
+```astro
+---
+import BaseLayout from '../../layouts/BaseLayout.astro'
+import { getCollection } from 'astro:content'
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog')
+  return posts.map(post => ({
+    params: { slug: post.slug },
+    props: { post },
+  }))
+}
+
+const { post } = Astro.props
+const { Content } = await post.render()
+---
+
+<BaseLayout title={post.data.title}>
+  <article>
+    <h1>{post.data.title}</h1>
+    <Content />
+  </article>
+</BaseLayout>
+```

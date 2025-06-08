@@ -1,0 +1,54 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'
+import { getCollection } from 'astro:content'
+import { getReadingTime, formatDate } from '../utils/blog'
+
+const posts = await getCollection('blog')
+const sortedPosts = posts.sort((a, b) => 
+  b.data.date.getTime() - a.data.date.getTime()
+).slice(0, 3)
+---
+
+<BaseLayout title="Johan Wulf">
+  <section class="mb-12">
+    <h1 class="text-2xl font-normal mb-4">
+      <span id="typewriter">Hi, I'm Johan</span><span class="typewriter-cursor"></span>
+    </h1>
+    <p class="text-overlay-0 mb-2">
+      <span class="prompt">$</span> Software developer based in Sweden
+    </p>
+  </section>
+
+  <section class="mt-12">
+    <h2 class="text-lg text-blue mb-8">## Recent Posts</h2>
+    <div class="space-y-6">
+      {sortedPosts.map((post) => (
+        <div class="flex justify-between items-baseline pb-6 border-b border-surface-0 last:border-0">
+          <a href={`/blog/${post.slug}`} class="text-text hover:text-blue hover:underline">
+            {post.data.title}
+          </a>
+          <span class="text-overlay-0 text-xs whitespace-nowrap ml-8">
+            {formatDate(post.data.date)} · {getReadingTime(post)}
+          </span>
+        </div>
+      ))}
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  const typewriter = document.getElementById('typewriter')
+  const cursor = document.querySelector('.typewriter-cursor')
+  
+  if (typewriter && cursor) {
+    const visited = localStorage.getItem('visited')
+    if (!visited) {
+      localStorage.setItem('visited', 'true')
+      typewriter.classList.add('typewriter-text')
+      cursor.style.display = 'none'
+      setTimeout(() => {
+        cursor.style.display = 'inline-block'
+      }, 2000)
+    }
+  }
+</script>

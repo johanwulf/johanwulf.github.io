@@ -1,0 +1,53 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro'
+import { getCollection } from 'astro:content'
+import { getReadingTime, formatDate } from '../../utils/blog'
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog')
+  return posts.map(post => ({
+    params: { slug: post.slug },
+    props: { post },
+  }))
+}
+
+const { post } = Astro.props
+const { Content } = await post.render()
+---
+
+<BaseLayout title={`${post.data.title} - Johan Wulf`}>
+  <article>
+    <div class="mb-12">
+      <h1 class="text-3xl font-normal text-text mb-4">{post.data.title}</h1>
+      <div class="flex items-center gap-4 text-sm text-overlay-0 mb-6">
+        <span>{formatDate(post.data.date)}</span>
+        <span>·</span>
+        <span>{getReadingTime(post)}</span>
+      </div>
+      <div class="flex gap-2 mb-8">
+        {post.data.tags.map(tag => (
+          <span class="text-xs px-3 py-1 bg-surface-0 text-overlay-1 rounded">
+            #{tag}
+          </span>
+        ))}
+      </div>
+    </div>
+    
+    <div class="prose prose-invert max-w-none
+      prose-headings:font-normal
+      prose-h1:text-3xl prose-h1:text-text prose-h1:mt-8 prose-h1:mb-4
+      prose-h2:text-2xl prose-h2:text-blue prose-h2:mt-6 prose-h2:mb-3
+      prose-h3:text-xl prose-h3:text-text prose-h3:mt-4 prose-h3:mb-2
+      prose-p:text-text prose-p:mb-4 prose-p:leading-relaxed
+      prose-a:text-blue hover:prose-a:underline
+      prose-blockquote:border-l-4 prose-blockquote:border-blue prose-blockquote:pl-4 prose-blockquote:text-overlay-1
+      prose-code:bg-surface-0 prose-code:text-peach prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-sm
+      prose-pre:bg-surface-0 prose-pre:rounded-lg prose-pre:p-4
+      prose-strong:text-text prose-strong:font-bold
+      prose-ul:list-disc prose-ul:list-inside
+      prose-ol:list-decimal prose-ol:list-inside
+      prose-li:text-text prose-li:ml-4">
+      <Content />
+    </div>
+  </article>
+</BaseLayout>

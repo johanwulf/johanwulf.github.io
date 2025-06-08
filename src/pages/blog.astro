@@ -1,0 +1,47 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'
+import { getCollection } from 'astro:content'
+import { getReadingTime, formatDate } from '../utils/blog'
+
+const posts = await getCollection('blog')
+const sortedPosts = posts.sort((a, b) => 
+  b.data.date.getTime() - a.data.date.getTime()
+)
+---
+
+<BaseLayout title="Blog - Johan Wulf">
+  <h1 class="text-2xl font-normal mb-8">Blog</h1>
+  <div class="space-y-6">
+    {sortedPosts.map((post) => (
+      <article class="pb-6 border-b border-surface-0 last:border-0">
+        <a href={`/blog/${post.slug}`} class="group block">
+          <h2 class="text-lg text-text group-hover:text-blue mb-2">
+            {post.data.title}
+          </h2>
+          {post.data.description && (
+            <p class="text-overlay-0 text-sm mb-2">
+              {post.data.description}
+            </p>
+          )}
+          <div class="flex items-center gap-4 text-xs text-overlay-0">
+            <span>{formatDate(post.data.date)}</span>
+            <span>·</span>
+            <span>{getReadingTime(post)}</span>
+            {post.data.tags && post.data.tags.length > 0 && (
+              <>
+                <span>·</span>
+                <div class="flex gap-2">
+                  {post.data.tags.map(tag => (
+                    <span class="px-2 py-1 bg-surface-0 text-overlay-1 rounded">
+                      #{tag}
+                    </span>
+                  ))}
+                </div>
+              </>
+            )}
+          </div>
+        </a>
+      </article>
+    ))}
+  </div>
+</BaseLayout>

@@ -1,0 +1,58 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    @apply bg-base text-text;
+  }
+  
+  ::selection {
+    @apply bg-surface-1;
+  }
+  
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    @apply w-2;
+  }
+  
+  ::-webkit-scrollbar-track {
+    @apply bg-mantle;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    @apply bg-surface-1 rounded;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-surface-2;
+  }
+}
+
+/* Custom component styles */
+.prompt {
+  @apply text-blue;
+}
+
+/* Only show cursor within the typewriter text */
+.typewriter-cursor {
+  @apply inline-block w-[10px] h-5 bg-blue animate-blink ml-0.5 align-text-bottom;
+}
+
+.typewriter-text {
+  @apply overflow-hidden whitespace-nowrap animate-typing inline-block;
+}
+
+/* Syntax highlighting - Using Astro's built-in Shiki */
+.astro-code {
+  @apply bg-surface-0 rounded-lg p-4 overflow-x-auto my-4;
+}
+
+.astro-code code {
+  @apply bg-transparent p-0;
+}
+
+/* Fix for inline code in prose */
+.prose code:not(.astro-code code) {
+  @apply before:content-none after:content-none;
+}
