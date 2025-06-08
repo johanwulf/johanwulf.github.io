@@ -3,6 +3,13 @@ import BaseLayout from '../layouts/BaseLayout.astro'
 
 const projects = [
   {
+    title: "Shadecn",
+    description: "SVG color customizer that transforms unDraw illustrations to match your shadcn themes",
+    tech: ["React", "TypeScript", "shadcn/ui", "Tailwind CSS"],
+    github: "https://github.com/johanwulf/shadecn",
+    live: "https://wulf.gg/shadecn"
+  },
+  {
     title: "Personal Website",
     description: "This website - built with Astro, React, TypeScript, and MDX",
     tech: ["Astro", "TypeScript", "Tailwind CSS", "MDX"],
@@ -35,16 +42,31 @@ const projects = [
             </span>
           ))}
         </div>
-        {project.github && (
-          <a 
-            href={project.github} 
-            class="text-blue hover:underline text-sm"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            → View on GitHub
-          </a>
-        )}
+        <div class="text-sm text-overlay-0 space-x-4">
+          {project.live && (
+            <>
+              <a 
+                href={project.live} 
+                class="text-green hover:underline"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Try it out
+              </a>
+              <span>·</span>
+            </>
+          )}
+          {project.github && (
+            <a 
+              href={project.github} 
+              class="text-blue hover:underline"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Source code
+            </a>
+          )}
+        </div>
       </article>
     ))}
   </div>
