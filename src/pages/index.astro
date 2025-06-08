@@ -12,7 +12,7 @@ const sortedPosts = posts.sort((a, b) =>
 <BaseLayout title="Johan Wulf">
   <section class="mb-12">
     <h1 class="text-2xl font-normal mb-4">
-      <span id="typewriter">Hi, I'm Johan</span><span class="typewriter-cursor"></span>
+      <span id="typewriter">Hi, I'm Johan</span>
     </h1>
     <p class="text-overlay-0 mb-2">
       <span class="prompt">$</span> Software developer based in Sweden
@@ -38,17 +38,12 @@ const sortedPosts = posts.sort((a, b) =>
 
 <script>
   const typewriter = document.getElementById('typewriter')
-  const cursor = document.querySelector('.typewriter-cursor')
   
-  if (typewriter && cursor) {
-    const visited = localStorage.getItem('visited')
-    if (!visited) {
-      localStorage.setItem('visited', 'true')
-      typewriter.classList.add('typewriter-text')
-      cursor.style.display = 'none'
-      setTimeout(() => {
-        cursor.style.display = 'inline-block'
-      }, 2000)
-    }
+  if (typewriter) {
+    typewriter.classList.add('typewriter-text')
+    
+    setTimeout(() => {
+      typewriter.classList.add('typing-complete')
+    }, 1500)
   }
 </script>

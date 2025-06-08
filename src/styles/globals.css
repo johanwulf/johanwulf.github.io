@@ -34,13 +34,29 @@
   @apply text-blue;
 }
 
-/* Only show cursor within the typewriter text */
-.typewriter-cursor {
-  @apply inline-block w-[10px] h-5 bg-blue animate-blink ml-0.5 align-text-bottom;
+/* Typewriter effect */
+.typewriter-container {
+  @apply inline-block;
 }
 
 .typewriter-text {
   @apply overflow-hidden whitespace-nowrap animate-typing inline-block;
+  width: 0;
+  border-right: 3px solid #89b4fa;
+  padding-right: 2px;
+}
+
+.typewriter-text.typing-complete {
+  @apply animate-none;
+  width: 13.5ch;
+  border-right: 3px solid #89b4fa;
+  padding-right: 4px;
+  animation: cursor-blink 1s infinite;
+}
+
+@keyframes cursor-blink {
+  0%, 49% { border-color: #89b4fa; }
+  50%, 100% { border-color: transparent; }
 }
 
 /* Syntax highlighting - Using Astro's built-in Shiki */
@@ -55,4 +71,24 @@
 /* Fix for inline code in prose */
 .prose code:not(.astro-code code) {
   @apply before:content-none after:content-none;
+}
+
+/* ASCII art responsive styling */
+.ascii-art {
+  @apply overflow-hidden;
+  transform-origin: left top;
+}
+
+@media (max-width: 480px) {
+  .ascii-art {
+    transform: scale(0.8);
+    @apply -ml-4;
+  }
+}
+
+@media (max-width: 360px) {
+  .ascii-art {
+    transform: scale(0.7);
+    @apply -ml-6;
+  }
 }

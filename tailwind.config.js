@@ -45,7 +45,8 @@ export default {
       },
       animation: {
         'blink': 'blink 1s infinite',
-        'typing': 'typing 2s steps(14, end)',
+        'typing': 'typing 1.5s steps(13, end) forwards',
+        'cursor-blink': 'blink 1s infinite',
       },
       keyframes: {
         blink: {
@@ -54,7 +55,7 @@ export default {
         },
         typing: {
           from: { width: '0' },
-          to: { width: '100%' },
+          to: { width: '13.5ch' },
         }
       },
       typography: ({ theme }) => ({
