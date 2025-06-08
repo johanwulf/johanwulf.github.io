@@ -1,5 +1,5 @@
 ---
-title: Building Shadecn - A shadcn Theme-Aware SVG Tool
+title: Building shadecn - A shadcn theme-aware SVG tool
 date: 2024-12-08
 tags: [react, shadcn, svg, tools, typescript]
 description: How I built a tool to make SVGs work seamlessly with shadcn themes
@@ -7,7 +7,7 @@ description: How I built a tool to make SVGs work seamlessly with shadcn themes
 
 I love using unDraw illustrations in my projects, but I'm way too lazy to manually change their colors to match my shadcn themes.
 
-So I built [Shadecn](https://github.com/johanwulf/shadecn) to fix exactly this problem (awesome name, right?).
+So I built [shadecn](https://github.com/johanwulf/shadecn) to fix exactly this problem (awesome name, right?).
 
 ## The Problem
 
@@ -23,7 +23,7 @@ Those hex colors are baked in. They don't respond to theme changes, and they pro
 
 ## The Solution
 
-Shadecn lets you import your shadcn theme CSS and map those hard-coded colors to your theme variables. Instead of `fill="#8b5cf6"`, you get `fill="hsl(var(--primary))"`.
+shadecn lets you import your shadcn theme CSS and map those hard-coded colors to your theme variables. Instead of `fill="#8b5cf6"`, you get `fill="hsl(var(--primary))"`.
 
 Here's how it works:
 
