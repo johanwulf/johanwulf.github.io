@@ -1,19 +1,50 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro'
 
-const projects = [
+async function fetchMetaTags(url: string) {
+  try {
+    const response = await fetch(url)
+    const html = await response.text()
+    
+    const titleMatch = html.match(/<meta property="og:title" content="([^"]*)"/) || 
+                      html.match(/<title[^>]*>([^<]+)<\/title>/)
+    const descriptionMatch = html.match(/<meta property="og:description" content="([^"]*)"/) ||
+                            html.match(/<meta name="description" content="([^"]*)"/)
+    const imageMatch = html.match(/<meta property="og:image" content="([^"]*)"/)
+    
+    return {
+      title: titleMatch ? titleMatch[1] : '',
+      description: descriptionMatch ? descriptionMatch[1] : '',
+      image: imageMatch ? imageMatch[1] : ''
+    }
+  } catch (error) {
+    return { title: '', description: '', image: '' }
+  }
+}
+
+const projectsData = [
   {
     title: "shadecn",
     description: "SVG color customizer that transforms unDraw illustrations to match your shadcn themes",
     tech: ["React", "TypeScript", "shadcn/ui", "Tailwind CSS"],
     github: "https://github.com/johanwulf/shadecn",
-    live: "https://wulf.gg/shadecn"
+    live: "https://wulf.gg/shadecn",
+    richMediaUrl: "https://wulf.gg/shadecn"
   },
   {
     title: "wulf.gg",
     description: "This website - built with Astro, React, TypeScript, and MDX",
     tech: ["Astro", "TypeScript", "Tailwind CSS", "MDX"],
-    github: "https://github.com/johanwulf/johanwulf.github.io"
+    github: "https://github.com/johanwulf/johanwulf.github.io",
+    richMediaUrl: "https://wulf.gg"
+  },
+  {
+    title: "replace-comment",
+    description: "GitHub Action to replace comments in PRs and issues with updated content",
+    tech: ["TypeScript", "GitHub Actions"],
+    github: "https://github.com/johanwulf/replace-comment",
+    live: "https://github.com/marketplace/actions/replace-comment",
+    richMediaUrl: "https://github.com/marketplace/actions/replace-comment"
   },
   {
     title: ".dotfiles",
@@ -22,6 +53,22 @@ const projects = [
     github: "https://github.com/johanwulf/.dotfiles"
   },
 ]
+
+const projects = await Promise.all(
+  projectsData.map(async (project) => {
+    if (project.richMediaUrl) {
+      const metaTags = await fetchMetaTags(project.richMediaUrl)
+      return {
+        ...project,
+        richMedia: {
+          url: project.richMediaUrl,
+          ...metaTags
+        }
+      }
+    }
+    return project
+  })
+)
 ---
 
 <BaseLayout title="Projects - Johan Wulf">
@@ -29,18 +76,40 @@ const projects = [
   <div class="space-y-8">
     {projects.map((project) => (
       <article class="pb-8 border-b border-surface-0 last:border-0">
-        <h2 class="text-lg text-text mb-2">
-          <span class="text-green">◆</span> {project.title}
-        </h2>
-        <p class="text-overlay-0 text-sm mb-3">
-          {project.description}
-        </p>
-        <div class="flex flex-wrap gap-2 mb-3">
-          {project.tech.map(tech => (
-            <span class="text-xs px-2 py-1 bg-surface-0 text-overlay-1 rounded">
-              {tech}
-            </span>
-          ))}
+        <div class="flex items-start gap-4">
+          <div class="flex-1">
+            <h2 class="text-lg text-text mb-2">
+              <span class="text-green">◆</span> {project.title}
+            </h2>
+            <p class="text-overlay-0 text-sm mb-3">
+              {project.description}
+            </p>
+            <div class="flex flex-wrap gap-2 mb-3">
+              {project.tech.map(tech => (
+                <span class="text-xs px-2 py-1 bg-surface-0 text-overlay-1 rounded">
+                  {tech}
+                </span>
+              ))}
+            </div>
+          </div>
+          {project.richMedia && (
+            <div class="w-20 h-20 bg-surface-0 flex-shrink-0 flex items-center justify-center rounded-lg overflow-hidden">
+              {project.richMedia.image ? (
+                <img 
+                  src={project.richMedia.image} 
+                  alt=""
+                  class="w-full h-full object-cover"
+                  loading="lazy"
+                />
+              ) : (
+                <svg class="w-6 h-6 text-overlay-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                  <rect width="18" height="18" x="3" y="3" rx="2" ry="2"/>
+                  <circle cx="9" cy="9" r="2"/>
+                  <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/>
+                </svg>
+              )}
+            </div>
+          )}
         </div>
         <div class="text-sm text-overlay-0 space-x-4">
           {project.live && (
