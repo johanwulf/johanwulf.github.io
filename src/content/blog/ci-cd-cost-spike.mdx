@@ -1,0 +1,165 @@
+---
+title: How I Increased Our Cloud Costs by 16,000% With a CI/CD "Improvement"
+date: 2025-06-13
+tags: [ci/cd, github-actions, docker, gcp, testing]
+description: A cautionary tale about parallelizing E2E tests and the hidden costs of Docker image pulls
+---
+
+Last week, I turned our $0.50/day GCP Artifact Registry into an $80/day money pit. Here's how a simple CI/CD improvement went horribly wrong.
+
+## The Problem
+
+Our E2E tests were running after merge to main, which meant broken code was making it to production. The obvious fix: run them on pull requests instead.
+
+But there was a catch - running all Cypress tests sequentially took over 20 minutes. No developer wants to wait that long for PR checks. So parallelization was a requirement from the start.
+
+## The Solution (That Wasn't)
+
+My approach seemed reasonable: use GitHub Actions' matrix strategy to run each test file in parallel.
+
+```yaml
+find-test-files:
+  runs-on: ubuntu-latest
+  outputs:
+    test-files: ${{ steps.find.outputs.files }}
+  steps:
+    - name: Find test files
+      id: find
+      run: |
+        # Find all test files and output as JSON array
+        echo "files=$(find e2e -name "*.spec.js" | jq -R . | jq -sc '.')" >> $GITHUB_OUTPUT
+
+run-tests:
+  strategy:
+    fail-fast: false
+    matrix:
+      test-file: ${{ fromJson(needs.find-test-files.outputs.test-files) }}
+```
+
+This spawned about 30 parallel runners, each pulling our Docker images:
+
+```yaml
+- name: Authenticate to registry
+  uses: google-github-actions/auth@v2
+  with:
+    workload_identity_provider: ${{ env.WIP }}
+    service_account: ${{ env.SERVICE_ACCOUNT }}
+
+- name: Pull Docker images
+  run: |
+    # Authenticate to artifact registry
+    docker login -u oauth2accesstoken -p ${{ steps.auth.outputs.access_token }} $REGISTRY_URL
+    
+    # Pull all required images
+    docker pull $REGISTRY_URL/database:latest
+    docker pull $REGISTRY_URL/backend-api:latest
+    docker pull $REGISTRY_URL/services:latest
+    docker pull $REGISTRY_URL/frontend:latest
+```
+
+Each runner needed:
+- A PostgreSQL database image
+- Our backend API image
+- Our services image
+- The frontend orchestrator image
+
+Tests ran fast. PRs were protected. I shipped it.
+
+## The Wake-Up Call
+
+Next morning, my manager sends me a screenshot of our GCP billing dashboard with just "???"
+
+The graph showed a massive spike. Our Artifact Registry costs had jumped from $0.50 to $80 per day. That's a 16,000% increase.
+
+Every single runner was pulling the full Docker images independently. With 30 runners and multiple large images, we were transferring the same data 30 times per test run.
+
+## The Fix
+
+The solution was embarrassingly straightforward: pull images once, cache them, then load from cache in each runner.
+
+```yaml
+prepare-images:
+  runs-on: ubuntu-latest
+  outputs:
+    cache-key: ${{ steps.cache-key.outputs.key }}
+  steps:
+    - name: Generate cache key from image digests
+      id: cache-key
+      run: |
+        # Get digest for each image
+        DIGESTS=""
+        for IMAGE in $IMAGE_LIST; do
+          DIGEST=$(docker manifest inspect $IMAGE | jq -r '.config.digest')
+          DIGESTS="${DIGESTS}-${DIGEST}"
+        done
+        echo "key=docker-images-${DIGESTS}" >> $GITHUB_OUTPUT
+
+    - name: Cache Docker images
+      id: cache
+      uses: actions/cache@v4
+      with:
+        path: /tmp/docker-images
+        key: ${{ steps.cache-key.outputs.key }}
+
+    - name: Pull and save images
+      if: steps.cache.outputs.cache-hit != 'true'
+      run: |
+        mkdir -p /tmp/docker-images
+        for IMAGE in $IMAGE_LIST; do
+          docker pull $IMAGE
+          docker save $IMAGE -o /tmp/docker-images/$(basename $IMAGE).tar
+        done
+```
+
+Then in each test runner:
+
+```yaml
+- name: Restore Docker images from cache
+  uses: actions/cache@v4
+  with:
+    path: /tmp/docker-images
+    key: ${{ needs.prepare-images.outputs.cache-key }}
+    fail-on-cache-miss: true
+
+- name: Load all images in parallel
+  run: |
+    for IMAGE_TAR in /tmp/docker-images/*.tar; do
+      docker load -i $IMAGE_TAR &
+    done
+    wait
+```
+
+The key insight: use Docker image digests as cache keys. This ensures we only pull when images actually change.
+
+## Lessons Learned
+
+1. **Think about shared resources when parallelizing**. What works for one runner might be wasteful for 30.
+
+2. **Monitor your cloud costs daily**. Set up billing alerts. Don't wait for your manager to notice.
+
+3. **Cache aggressively in CI/CD**. Docker images, dependencies, build artifacts - if you're pulling it more than once, you're probably doing it wrong.
+
+## The Numbers
+
+- **Before**: $0.50/day
+- **During the incident**: $80/day
+- **After the fix**: less than $1/day
+- **Parallel runners**: ~30 test files
+- **Test duration**: Reduced from 20+ minutes to ~5 minutes with parallelization
+
+## The Current Solution
+
+Our E2E tests now run efficiently with proper caching. The prepare job pulls images once, caches them with digest-based keys, and all test runners load from cache. We're back to reasonable costs while maintaining fast test execution.
+
+```yaml
+# Prevent multiple runs for the same PR
+concurrency:
+  group: e2e-pr-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+```
+
+We also added concurrency groups to prevent multiple test runs from the same PR, further reducing unnecessary pulls.
+
+## Takeaway
+
+Parallelization is powerful, but it amplifies both efficiency and inefficiency. Always consider the cost implications of your architectural decisions, especially when dealing with cloud resources.
